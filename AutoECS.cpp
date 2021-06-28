@@ -9,7 +9,8 @@ using namespace std;
 /*
 ** GLOBAL VARIABLES
 */
-char temp;
+void print_menu();
+void print_actions_menu();
 
 /*
 ** Posiciona el cursor en las coordenadas x,y especificadas
@@ -30,6 +31,8 @@ void gotoxy(int x, int y){
 ** (llamar esta funcion lo menos posible ya que tarda en pintar todo el fondo)
 */
 void print_bg() {
+	// Limpia la pantalla
+	system("cls");
 	//Pinta el area general de verde
 	for (int i=2; i<139; i++) {
 		for (int j=1; j<49; j++) {
@@ -74,6 +77,176 @@ void print_select_area() {
 }
 
 /*
+** Mapea las unidades de red de windows
+** @mca 28/06/2021
+*/
+void map_network_drive() {
+	
+}
+
+/*
+** Desmapea las unidades de red de windows
+** @mca 28/06/2021
+*/
+void unmap_network_drive() {
+	
+}
+
+/*
+** Actualiza la hora del sistema
+** @mca 28/06/2021
+*/
+void update_sys_hour() {
+	system("cls");
+    system("net start w32time");
+    system("w32tm /resync");
+    cin.ignore();
+	cin.ignore();
+	print_bg();
+    print_actions_menu();
+}
+
+/*
+** Descarga y usa el burnintest
+** @mca 28/06/2021
+*/
+void bit() {
+	
+}
+
+/*
+** Imprime un menu e instala los drivers según el input
+** @mca 28/06/2021
+*/
+void print_drivers_menu() {
+	//LLama la funcion de pintar el area de seleccion 
+	print_select_area();
+	gotoxy(21,21);
+    printf("\E[0;36m1.\E[0;37mNOMBRE DE PLACA");
+    gotoxy(21,22);
+    printf("\E[0;36m2.\E[0;37mNOMBRE DE PLACA");
+    gotoxy(21,23);
+    printf("\E[0;36m3.\E[0;37mNOMBRE DE PLACA");
+    gotoxy(21,24);
+    printf("\E[0;36m4.\E[0;37mNOMBRE DE PLACA");
+    gotoxy(21,25);
+    printf("\E[0;36m5.\E[0;37mNOMBRE DE PLACA");
+    gotoxy(21,26);
+    printf("\E[0;36m6.\E[0;37mNOMBRE DE PLACA");
+    gotoxy(21,27);
+    printf("\E[0;36m7.\E[0;37mNOMBRE DE PLACA");
+    gotoxy(21,28);
+    printf("\E[0;31m0.\E[0;37mVolver al menu");
+    gotoxy(61,39);
+	printf("Elige una opcion: ");
+	// Recoge un valor introducido por el usuario
+	int menu_opt;
+    scanf("%d", &menu_opt);
+    // Detecta si se ha introducido un valor no valido
+    if (menu_opt<=9 || menu_opt==666) {
+    	switch (menu_opt) {
+    		case 0:
+    			print_actions_menu();
+    		break;
+    		case 1:
+    			
+    		break;
+    		case 2:
+    			
+    		break;
+    		case 3:
+    			
+    		break;
+    		case 4:
+    			
+    		break;
+    		case 5:
+    			
+    		break;
+    		case 6:
+    			
+    		break;
+    		case 7:
+    			
+    		break;
+    		case 8:
+    			
+    		break;
+    		case 9:
+    			
+    		break;
+    		case 666:
+    			print_bg();
+    			print_drivers_menu();
+    		break;
+    	}
+	}
+}
+
+/*
+** Imprime el menu de acciones y las realiza
+** @mca 28/06/2021
+*/
+void print_actions_menu() {
+	//LLama la funcion de pintar el area de seleccion 
+	print_select_area();
+	// Imprime las opciones
+    gotoxy(58,24);
+    printf("\E[0;36m1.\E[0;37mConectar unidades de red");
+    gotoxy(58,26);
+    printf("\E[0;36m2.\E[0;37mDesconectar unidades de red");
+    gotoxy(58,28);
+    printf("\E[0;36m3.\E[0;37mInstalar Drivers");
+    gotoxy(58,30);
+    printf("\E[0;36m4.\E[0;37mActualizar la hora del sistema");
+    gotoxy(58,32);
+    printf("\E[0;36m5.\E[0;37mBurninTest");
+    gotoxy(58,34);
+    printf("\E[0;31m0.\E[0;37mVolver al menu");
+    gotoxy(61,39);
+	printf("Elige una opcion: ");
+	// Recoge un valor introducido por el usuario
+	int menu_opt;
+    scanf("%d", &menu_opt);
+    // Detecta si se ha introducido un valor no valido
+    if (menu_opt<=4 || menu_opt==666) {
+    	// Switch para las diferentes opciones
+    	switch (menu_opt) {
+    		case 0:
+    			print_menu();
+    		break;
+    		case 1:
+    			map_network_drive();
+    		break;
+    		case 2:
+    			unmap_network_drive();
+    		break;
+    		case 3:
+    			print_drivers_menu();
+    		break;
+    		case 4:
+    			update_sys_hour();
+    		break;
+    		case 5:
+    			bit();
+    		break;
+    		case 666:
+    			print_bg();
+    			print_actions_menu();
+    		break;
+		}
+	} else {
+		gotoxy(53,41);
+		printf("\e[4;31mHAS INTRODUCIDO UN VALOR NO VALIDO!");
+		gotoxy(50,42);
+		printf("PRESIONA ENTER PARA VOLVER A INTENTARLO...\e[0m");
+		cin.ignore();
+		cin.ignore();
+		print_actions_menu();
+	}
+}
+
+/*
 ** Imprime el menu basico para seleccionar acciones
 ** @mca 24/06/2021
 */
@@ -93,21 +266,23 @@ void print_menu() {
 	int menu_opt;
     scanf("%d", &menu_opt);
     // Detecta si se ha introducido un valor no valido
-    if (menu_opt<=2) {
+    if (menu_opt<=2 || menu_opt==666) {
     	// Switch para las diferentes opciones
     	switch (menu_opt) {
     		case 0:
     			exit(0);
-    		break;
+		   	break;
     		case 1:
     			print_select_area();
     			gotoxy(21,21);
-    			printf("\E[0maaa");
+    			printf("\E[0mTODO MODO AUTOMATICO PAPUUU");
     		break;
     		case 2:
-    			print_select_area();
-    			gotoxy(21,21);
-    			printf("\E[0mbbb");
+    			print_actions_menu();
+    		break;
+    		case 666:
+    			print_bg();
+    			print_menu();
     		break;
 		}
 	} else {
@@ -123,14 +298,8 @@ void print_menu() {
 }
 
 int main(){
-	
 	system("TITLE AutoECS");
 	system("MODE 141,50");
-	
 	print_bg();
 	print_menu();
-	
-	// borrame al final papu
-	cin.ignore();
-	cin.ignore();
 }
