@@ -77,11 +77,43 @@ void print_select_area() {
 }
 
 /*
+** Pinta el cuadrado de log cuando se ejecute los comandos de la terminal
+** @mca 29/06/2021
+*/
+void print_log_title() {
+	gotoxy(0,1);
+	printf("\E[0;37m %c%c       %c%c%c%c%c%c   %c%c%c%c%c%c",219,219,219,219,219,219,219,219,219,219,219,219,219,219);
+	gotoxy(0,2);
+	printf("\E[0;37m %c%c      %c%c    %c%c %c%c",219,219,219,219,219,219,219,219);
+	gotoxy(0,3);
+	printf("\E[0;37m %c%c      %c%c    %c%c %c%c   %c%c%c",219,219,219,219,219,219,219,219,219,219,219);
+	gotoxy(0,4);
+	printf("\E[0;37m %c%c      %c%c    %c%c %c%c    %c%c",219,219,219,219,219,219,219,219,219,219);
+	gotoxy(0,5);
+	printf("\E[0;37m %c%c%c%c%c%c%c  %c%c%c%c%c%c   %c%c%c%c%c%c",219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219,219);
+	gotoxy(0,6);
+	for (int i=0; i<141; i++) {
+		printf("\E[0;37m%c",205);
+	}
+	gotoxy(0,8);
+}
+
+/*
 ** Mapea las unidades de red de windows
 ** @mca 28/06/2021
 */
 void map_network_drive() {
-	
+	system("cls");
+	print_log_title();
+	printf("\E[0;32mMapeando unidades de red...\E[0;37m\n\n");
+	system("net use z: \\\\MCA-PC\\Users\\Marc\\Desktop\\test /persistent:no");
+	//system("net use x: ######AQUI VA LA RUTA A LA UNIDAD###### /persistent:no");
+	//system("net use y: ######AQUI VA LA RUTA A LA UNIDAD###### /persistent:no");
+	//system("net use z: ######AQUI VA LA RUTA A LA UNIDAD###### /persistent:no");
+	cin.ignore();
+	cin.ignore();
+	print_bg();
+	print_actions_menu();
 }
 
 /*
@@ -89,7 +121,14 @@ void map_network_drive() {
 ** @mca 28/06/2021
 */
 void unmap_network_drive() {
-	
+	system("cls");
+	print_log_title();
+	printf("\E[0;32mDesmapeando unidades de red...\E[0;37m\n\n");
+	system("net use * /delete /y");
+	cin.ignore();
+	cin.ignore();
+	print_bg();
+	print_actions_menu();
 }
 
 /*
@@ -98,7 +137,10 @@ void unmap_network_drive() {
 */
 void update_sys_hour() {
 	system("cls");
+	print_log_title();
+	printf("\E[0;32mComprobando si el servicio de tiempo esta iniciado...\E[0;37m\n\n");
     system("net start w32time");
+    printf("\E[0;32mSincronizando hora con el servidor time.windows.com...\E[0;37m\n\n");
     system("w32tm /resync");
     cin.ignore();
 	cin.ignore();
