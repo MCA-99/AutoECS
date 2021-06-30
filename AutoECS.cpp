@@ -106,14 +106,9 @@ void map_network_drive() {
 	system("cls");
 	print_log_title();
 	printf("\E[0;32mMapeando unidades de red...\E[0;37m\n\n");
-	system("net use z: \\\\MCA-PC\\Users\\Marc\\Desktop\\test /persistent:no");
-	//system("net use x: ######AQUI VA LA RUTA A LA UNIDAD###### /persistent:no");
-	//system("net use y: ######AQUI VA LA RUTA A LA UNIDAD###### /persistent:no");
-	//system("net use z: ######AQUI VA LA RUTA A LA UNIDAD###### /persistent:no");
-	cin.ignore();
-	cin.ignore();
-	print_bg();
-	print_actions_menu();
+	system("net use X: \\\\MASTERS\\drivers /persistent:no");
+	system("net use Z: \\\\MASTERS\\informes /persistent:no");
+	printf("\E[0;32m### COMPLETADO Pulsa cualquier tecla para volver ###\E[0;37m\n\n");
 }
 
 /*
@@ -125,10 +120,7 @@ void unmap_network_drive() {
 	print_log_title();
 	printf("\E[0;32mDesmapeando unidades de red...\E[0;37m\n\n");
 	system("net use * /delete /y");
-	cin.ignore();
-	cin.ignore();
-	print_bg();
-	print_actions_menu();
+	printf("\E[0;32m### COMPLETADO Pulsa cualquier tecla para volver ###\E[0;37m\n\n");
 }
 
 /*
@@ -142,10 +134,6 @@ void update_sys_hour() {
     system("net start w32time");
     printf("\E[0;32mSincronizando hora con el servidor time.windows.com...\E[0;37m\n\n");
     system("w32tm /resync");
-    cin.ignore();
-	cin.ignore();
-	print_bg();
-    print_actions_menu();
 }
 
 /*
@@ -153,76 +141,47 @@ void update_sys_hour() {
 ** @mca 28/06/2021
 */
 void bit() {
-	
+	system("cls");
+	print_log_title();
+	printf("\E[0;32mMoviendo BurninTest al equipo...\E[0;37m\n\n");
+	system("Xcopy /E /I ""X:\\otros\\BIT\\"" """"");
+	system("copy ""X:\\otros\\BIT\\"" """"");
+	printf("\n\E[0;32mIniciando BurnInTest...\E[0;37m\n\n");
+	system(""".\\BurninTest\\bit.exe"" /c "".\\BurninTest\\config.bitcfg"" /r""");
+	printf("\E[0;32mMoviendo el informe a la unidad...\E[0;37m\n\n");
+	system("AutoBit.bat");
+	printf("\n\E[0;32mLimpiando...\E[0;37m\n\n");
+	system("rmdir /Q /S ""BurnInTest""");
+	system("del ""AutoBit.bat""");
+	printf("\n\E[0;32m### COMPLETADO Pulsa cualquier tecla para volver ###\E[0;37m\n\n");
 }
 
 /*
-** Imprime un menu e instala los drivers según el input
+** Instala los drivers automaticamente
 ** @mca 28/06/2021
 */
-void print_drivers_menu() {
-	//LLama la funcion de pintar el area de seleccion 
-	print_select_area();
-	gotoxy(21,21);
-    printf("\E[0;36m1.\E[0;37mNOMBRE DE PLACA");
-    gotoxy(21,22);
-    printf("\E[0;36m2.\E[0;37mNOMBRE DE PLACA");
-    gotoxy(21,23);
-    printf("\E[0;36m3.\E[0;37mNOMBRE DE PLACA");
-    gotoxy(21,24);
-    printf("\E[0;36m4.\E[0;37mNOMBRE DE PLACA");
-    gotoxy(21,25);
-    printf("\E[0;36m5.\E[0;37mNOMBRE DE PLACA");
-    gotoxy(21,26);
-    printf("\E[0;36m6.\E[0;37mNOMBRE DE PLACA");
-    gotoxy(21,27);
-    printf("\E[0;36m7.\E[0;37mNOMBRE DE PLACA");
-    gotoxy(21,28);
-    printf("\E[0;31m0.\E[0;37mVolver al menu");
-    gotoxy(61,39);
-	printf("Elige una opcion: ");
-	// Recoge un valor introducido por el usuario
-	int menu_opt;
-    scanf("%d", &menu_opt);
-    // Detecta si se ha introducido un valor no valido
-    if (menu_opt<=9 || menu_opt==666) {
-    	switch (menu_opt) {
-    		case 0:
-    			print_actions_menu();
-    		break;
-    		case 1:
-    			
-    		break;
-    		case 2:
-    			
-    		break;
-    		case 3:
-    			
-    		break;
-    		case 4:
-    			
-    		break;
-    		case 5:
-    			
-    		break;
-    		case 6:
-    			
-    		break;
-    		case 7:
-    			
-    		break;
-    		case 8:
-    			
-    		break;
-    		case 9:
-    			
-    		break;
-    		case 666:
-    			print_bg();
-    			print_drivers_menu();
-    		break;
-    	}
-	}
+void install_drivers() {
+	system("cls");
+	print_log_title();
+	printf("\E[0;32mInstalando drivers...\E[0;37m\n\n");
+	system("pnputil /add-driver \\\\MASTERS\\drivers\\otros\\*.inf /subdirs /install");
+	printf("\n\E[0;32m### COMPLETADO Pulsa cualquier tecla para volver ###\E[0;37m\n\n");
+}
+
+/*
+** Ejecuta todas las funciones de forma automatica
+** @mca 30/06/2021
+*/
+void auto_mode() {
+	map_network_drive();
+	update_sys_hour();
+	install_drivers();
+	bit();
+	unmap_network_drive();
+	cin.ignore();
+	cin.ignore();
+	print_bg();
+	print_menu();
 }
 
 /*
@@ -251,7 +210,7 @@ void print_actions_menu() {
 	int menu_opt;
     scanf("%d", &menu_opt);
     // Detecta si se ha introducido un valor no valido
-    if (menu_opt<=4 || menu_opt==666) {
+    if (menu_opt<=5 || menu_opt==666) {
     	// Switch para las diferentes opciones
     	switch (menu_opt) {
     		case 0:
@@ -259,18 +218,38 @@ void print_actions_menu() {
     		break;
     		case 1:
     			map_network_drive();
+    			cin.ignore();
+				cin.ignore();
+				print_bg();
+    			print_actions_menu();
     		break;
     		case 2:
     			unmap_network_drive();
+    			cin.ignore();
+				cin.ignore();
+				print_bg();
+    			print_actions_menu();
     		break;
     		case 3:
-    			print_drivers_menu();
+    			install_drivers();
+    			cin.ignore();
+				cin.ignore();
+				print_bg();
+    			print_actions_menu();
     		break;
     		case 4:
     			update_sys_hour();
+    			cin.ignore();
+				cin.ignore();
+				print_bg();
+    			print_actions_menu();
     		break;
     		case 5:
     			bit();
+    			cin.ignore();
+				cin.ignore();
+				print_bg();
+    			print_actions_menu();
     		break;
     		case 666:
     			print_bg();
@@ -315,9 +294,7 @@ void print_menu() {
     			exit(0);
 		   	break;
     		case 1:
-    			print_select_area();
-    			gotoxy(21,21);
-    			printf("\E[0mTODO MODO AUTOMATICO PAPUUU");
+    			auto_mode();
     		break;
     		case 2:
     			print_actions_menu();
