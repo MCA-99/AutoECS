@@ -173,6 +173,18 @@ void update_sys() {
 }
 
 /*
+** Recibe una clave por input y la instala en el sistema
+** @mca 01/07/2021
+*/
+void activate_sys() {
+	system("cls");
+	print_log_title();
+	printf("\E[0;32mAbriendo la ventana de activacion del sistema...\E[0;37m\n\n");
+	system("start ms-settings:activation");
+	printf("\E[0;32m### COMPLETADO Pulsa cualquier tecla para volver ###\E[0;37m\n\n");
+}
+
+/*
 ** Descarga y usa el burnintest
 ** @mca 28/06/2021
 */
@@ -190,7 +202,7 @@ void bit() {
 	printf("\n\E[0;32mLimpiando...\E[0;37m\n\n");
 	system("rmdir /Q /S ""BurnInTest""");
 	system("del ""AutoBit.bat""");
-	printf("\n\E[0;32m### COMPLETADO Pulsa cualquier tecla para volver ###\E[0;37m\n\n");
+	unmap_network_drive();
 }
 
 /*
@@ -200,10 +212,11 @@ void bit() {
 void auto_mode() {
 	map_network_drive();
 	update_sys_hour();
-	install_drivers();
+	//install_drivers();
 	update_sys();
+	activate_sys();
 	bit();
-	unmap_network_drive();
+	//unmap_network_drive();
 	cin.ignore();
 	cin.ignore();
 	print_bg();
@@ -229,16 +242,18 @@ void print_actions_menu() {
     gotoxy(58,32);
     printf("\E[0;36m5.\E[0;37mInstalar actualizaciones");
     gotoxy(58,34);
-    printf("\E[0;36m6.\E[0;37mBurninTest");
+    printf("\E[0;36m6.\E[0;37mActivar el sistema");
     gotoxy(58,36);
+    printf("\E[0;36m7.\E[0;37mBurninTest");
+    gotoxy(58,38);
     printf("\E[0;31m0.\E[0;37mVolver al menu");
-    gotoxy(61,39);
+    gotoxy(61,43);
 	printf("Elige una opcion: ");
 	// Recoge un valor introducido por el usuario
 	int menu_opt;
     scanf("%d", &menu_opt);
     // Detecta si se ha introducido un valor no valido
-    if (menu_opt<=6 || menu_opt==666) {
+    if (menu_opt<=7 || menu_opt==666) {
     	// Switch para las diferentes opciones
     	switch (menu_opt) {
     		case 0:
@@ -265,6 +280,10 @@ void print_actions_menu() {
     			cls_act_mnu();
     		break;
     		case 6:
+    			activate_sys();
+    			cls_act_mnu();
+    		break;
+    		case 7:
     			bit();
     			cls_act_mnu();
     		break;
