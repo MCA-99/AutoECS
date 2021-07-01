@@ -57,7 +57,7 @@ void print_bg() {
     gotoxy(41,10);
     printf("\E[0;37m%c%c%c%c%c%c%c%c%c%c%c   %c%c%c   %c%c%c   %c%c%c   %c%c%c\E[0;31m%c%c\E[0;37m%c%c%c%c  %c%c%c     %c%c%c%c%c%c%c%c",219,219,201,205,205,219,219,186,219,219,186,219,219,186,219,219,186,219,219,186,219,219,186,219,219,201,205,205,188,219,219,186,200,205,205,205,205,219,219,186);
     gotoxy(41,11);
-    printf("\E[0;37m%c%c%c  %c%c%c%c%c%c%c%c%c%c%c%c   %c%c%c   %c%c%c%c%c%c%c%c%c\E[0;31m%c%c%c%c%c%c%c\E[0;37m%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c",219,219,186,219,219,186,200,219,219,219,219,219,219,201,188,219,219,186,200,219,219,219,219,219,219,201,188,219,219,219,219,219,219,219,187,219,219,219,219,219,219,219,187,219,219,219,219,219,219,219,186);
+    printf("\E[0;37m%c%c%c  %c%c%c%c%c%c%c%c%c%c%c%c   %c%c%c   %c%c%c%c%c%c%c%c%c\E[0;31m%c%c%c%c%c%c%c\E[0;37m%c %c%c%c%c%c%c%c%c%c%c%c%c%c%c%c",219,219,186,219,219,186,200,219,219,219,219,219,219,201,188,219,219,186,200,219,219,219,219,219,219,201,188,219,219,219,219,219,219,219,187,219,219,219,219,219,219,187,219,219,219,219,219,219,219,186);
 	gotoxy(41,12);
 	printf("\E[0;37m%c%c%c  %c%c%c %c%c%c%c%c%c%c    %c%c%c    %c%c%c%c%c%c%c %c%c%c%c%c%c%c%c %c%c%c%c%c%c%c%c%c%c%c%c%c%c%c",200,205,188,200,205,188,200,205,205,205,205,205,188,200,205,188,200,205,205,205,205,205,188,200,205,205,205,205,205,205,188,200,205,205,205,205,205,188,200,205,205,205,205,205,205,188);
 }
@@ -98,6 +98,13 @@ void print_log_title() {
 	gotoxy(0,8);
 }
 
+void cls_act_mnu() {
+	cin.ignore();
+	cin.ignore();
+	print_bg();
+    print_actions_menu();
+}
+
 /*
 ** Mapea las unidades de red de windows
 ** @mca 28/06/2021
@@ -134,6 +141,35 @@ void update_sys_hour() {
     system("net start w32time");
     printf("\E[0;32mSincronizando hora con el servidor time.windows.com...\E[0;37m\n\n");
     system("w32tm /resync");
+    printf("\n\E[0;32m### COMPLETADO Pulsa cualquier tecla para volver ###\E[0;37m\n\n");
+}
+
+/*
+** Instala los drivers automaticamente
+** @mca 28/06/2021
+*/
+void install_drivers() {
+	system("cls");
+	print_log_title();
+	printf("\E[0;32mInstalando drivers...\E[0;37m\n\n");
+	system("pnputil /add-driver \\\\MASTERS\\drivers\\drivers\\*.inf /subdirs /install");
+	printf("\n\E[0;32m### COMPLETADO Pulsa cualquier tecla para volver ###\E[0;37m\n\n");
+}
+
+/*
+** Actualiza el sistema usando WUMT
+** @mca 01/07/2021
+*/
+void update_sys() {
+	system("cls");
+	print_log_title();
+	printf("\E[0;32mMoviendo el actualizador al equipo...\E[0;37m\n\n");
+	system("copy ""X:\\programas\\wumt.exe"" """"");
+	printf("\n\E[0;32mAbriendo actualizador...\E[0;37m\n");
+	system("wumt.exe");
+	printf("\n\E[0;32mLimpiando...\E[0;37m\n\n");
+	system("del ""wumt.exe""");
+	printf("\E[0;32m### COMPLETADO Pulsa cualquier tecla para volver ###\E[0;37m\n\n");
 }
 
 /*
@@ -141,11 +177,12 @@ void update_sys_hour() {
 ** @mca 28/06/2021
 */
 void bit() {
+	map_network_drive();
 	system("cls");
 	print_log_title();
 	printf("\E[0;32mMoviendo BurninTest al equipo...\E[0;37m\n\n");
-	system("Xcopy /E /I ""X:\\otros\\BIT\\"" """"");
-	system("copy ""X:\\otros\\BIT\\"" """"");
+	system("Xcopy /E /I ""X:\\programas\\BurnInTest"" ""BurnInTest""");
+	system("copy ""X:\\programas\\AutoBit.bat"" """"");
 	printf("\n\E[0;32mIniciando BurnInTest...\E[0;37m\n\n");
 	system(""".\\BurninTest\\bit.exe"" /c "".\\BurninTest\\config.bitcfg"" /r""");
 	printf("\E[0;32mMoviendo el informe a la unidad...\E[0;37m\n\n");
@@ -157,18 +194,6 @@ void bit() {
 }
 
 /*
-** Instala los drivers automaticamente
-** @mca 28/06/2021
-*/
-void install_drivers() {
-	system("cls");
-	print_log_title();
-	printf("\E[0;32mInstalando drivers...\E[0;37m\n\n");
-	system("pnputil /add-driver \\\\MASTERS\\drivers\\otros\\*.inf /subdirs /install");
-	printf("\n\E[0;32m### COMPLETADO Pulsa cualquier tecla para volver ###\E[0;37m\n\n");
-}
-
-/*
 ** Ejecuta todas las funciones de forma automatica
 ** @mca 30/06/2021
 */
@@ -176,6 +201,7 @@ void auto_mode() {
 	map_network_drive();
 	update_sys_hour();
 	install_drivers();
+	update_sys();
 	bit();
 	unmap_network_drive();
 	cin.ignore();
@@ -201,8 +227,10 @@ void print_actions_menu() {
     gotoxy(58,30);
     printf("\E[0;36m4.\E[0;37mActualizar la hora del sistema");
     gotoxy(58,32);
-    printf("\E[0;36m5.\E[0;37mBurninTest");
+    printf("\E[0;36m5.\E[0;37mInstalar actualizaciones");
     gotoxy(58,34);
+    printf("\E[0;36m6.\E[0;37mBurninTest");
+    gotoxy(58,36);
     printf("\E[0;31m0.\E[0;37mVolver al menu");
     gotoxy(61,39);
 	printf("Elige una opcion: ");
@@ -210,7 +238,7 @@ void print_actions_menu() {
 	int menu_opt;
     scanf("%d", &menu_opt);
     // Detecta si se ha introducido un valor no valido
-    if (menu_opt<=5 || menu_opt==666) {
+    if (menu_opt<=6 || menu_opt==666) {
     	// Switch para las diferentes opciones
     	switch (menu_opt) {
     		case 0:
@@ -218,38 +246,27 @@ void print_actions_menu() {
     		break;
     		case 1:
     			map_network_drive();
-    			cin.ignore();
-				cin.ignore();
-				print_bg();
-    			print_actions_menu();
+    			cls_act_mnu();
     		break;
     		case 2:
     			unmap_network_drive();
-    			cin.ignore();
-				cin.ignore();
-				print_bg();
-    			print_actions_menu();
+    			cls_act_mnu();
     		break;
     		case 3:
     			install_drivers();
-    			cin.ignore();
-				cin.ignore();
-				print_bg();
-    			print_actions_menu();
+    			cls_act_mnu();
     		break;
     		case 4:
     			update_sys_hour();
-    			cin.ignore();
-				cin.ignore();
-				print_bg();
-    			print_actions_menu();
+    			cls_act_mnu();
     		break;
     		case 5:
+    			update_sys();
+    			cls_act_mnu();
+    		break;
+    		case 6:
     			bit();
-    			cin.ignore();
-				cin.ignore();
-				print_bg();
-    			print_actions_menu();
+    			cls_act_mnu();
     		break;
     		case 666:
     			print_bg();
