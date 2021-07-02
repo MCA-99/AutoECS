@@ -98,7 +98,46 @@ void print_log_title() {
 	gotoxy(0,8);
 }
 
-void cls_act_mnu() {
+/*
+** Pinta una pantalla de ayuda en el menu principal
+** @mca 02/07/2021
+*/
+void print_help() {
+	print_select_area();
+	gotoxy(21,21);
+	printf("\e[4;37m%c Este programa simplifica el proceso de BurnIn en los equipos fabricados.",175);
+	
+	gotoxy(21,26);
+	printf("%c Segun el color en los numeros de las opciones significa una cosa u otra:",175);
+	gotoxy(21,28);
+	printf("\E[0;36mCyan\E[0m: La opcion se puede utilizar con normalidad, no requiere permisos de administrador.");
+	gotoxy(21,30);
+	printf("\E[0;33mNaranja\E[0m: La opcion requiere permnisos de administrador, si no se ha ininiciado el programa como"); 
+	gotoxy(21,31);
+	printf("administrador es necesario reiniciarlo y abrirlo con los permisos correspondientes.");
+	gotoxy(21,33);
+	printf("\E[0;31mRojo\E[0m: Se utiliza para marcar la opcion de volover atras, o en caso de error.");
+	gotoxy(21,35);
+	printf("\E[0;35mMorado\E[0m: Se utiliza para marcar la opcion de ayuda.");
+	
+	gotoxy(57,39);
+	printf("\E[4;31mPRESIONA ENTER PARA VOLVER\e[0m");
+	
+	gotoxy(21,43);
+	printf("Made By: MCA");
+	gotoxy(21,44);
+	printf("Contact Mail: m.capdet@e-corp.es");
+	
+	cin.ignore();
+	cin.ignore();
+    print_menu();
+}
+
+/*
+** Espera un input antes de volver a pintar el fondo y el menu (se usará en cada funcion del menu de acciones)
+** @mca 01/07/2021
+*/
+void cls_actions_mnu() {
 	cin.ignore();
 	cin.ignore();
 	print_bg();
@@ -152,7 +191,7 @@ void install_drivers() {
 	system("cls");
 	print_log_title();
 	printf("\E[0;32mInstalando drivers...\E[0;37m\n\n");
-	system("pnputil /add-driver \\\\MASTERS\\drivers\\drivers\\*.inf /subdirs /install");
+	system("pnputil /add-driver X:\\MASTERS\\drivers\\drivers\\*.inf /subdirs /install");
 	printf("\n\E[0;32m### COMPLETADO Pulsa cualquier tecla para volver ###\E[0;37m\n\n");
 }
 
@@ -161,6 +200,7 @@ void install_drivers() {
 ** @mca 01/07/2021
 */
 void update_sys() {
+	map_network_drive();
 	system("cls");
 	print_log_title();
 	printf("\E[0;32mMoviendo el actualizador al equipo...\E[0;37m\n\n");
@@ -202,7 +242,30 @@ void bit() {
 	printf("\n\E[0;32mLimpiando...\E[0;37m\n\n");
 	system("rmdir /Q /S ""BurnInTest""");
 	system("del ""AutoBit.bat""");
-	unmap_network_drive();
+}
+
+/*
+** Abre el administrador de dispositivos
+** @mca 02/07/2021
+*/
+void device_manager() {
+	system("cls");
+	print_log_title();
+	printf("\E[0;32mAbriendo el administrador de dispositivos...\E[0;37m\n\n");
+	system("devmgmt.msc");
+	printf("\E[0;32m### COMPLETADO Pulsa cualquier tecla para volver ###\E[0;37m\n\n");
+}
+
+/*
+** Abre el gestor de particiones
+** @mca 02/07/2021
+*/
+void partition_manager() {
+	system("cls");
+	print_log_title();
+	printf("\E[0;32mAbriendo el gestor de particiones...\E[0;37m\n\n");
+	system("diskmgmt.msc");
+	printf("\E[0;32m### COMPLETADO Pulsa cualquier tecla para volver ###\E[0;37m\n\n");
 }
 
 /*
@@ -212,11 +275,11 @@ void bit() {
 void auto_mode() {
 	map_network_drive();
 	update_sys_hour();
-	//install_drivers();
+	//install_drivers(); Takes too long to execute, use only in actions under your responsability
 	update_sys();
 	activate_sys();
 	bit();
-	//unmap_network_drive();
+	unmap_network_drive();
 	cin.ignore();
 	cin.ignore();
 	print_bg();
@@ -231,21 +294,25 @@ void print_actions_menu() {
 	//LLama la funcion de pintar el area de seleccion 
 	print_select_area();
 	// Imprime las opciones
-    gotoxy(58,24);
+    gotoxy(39,24);
     printf("\E[0;36m1.\E[0;37mConectar unidades de red");
-    gotoxy(58,26);
+    gotoxy(39,26);
     printf("\E[0;36m2.\E[0;37mDesconectar unidades de red");
-    gotoxy(58,28);
-    printf("\E[0;36m3.\E[0;37mInstalar Drivers");
-    gotoxy(58,30);
-    printf("\E[0;36m4.\E[0;37mActualizar la hora del sistema");
-    gotoxy(58,32);
+    gotoxy(39,28);
+    printf("\E[0;33m3.\E[0;37mInstalar Drivers");
+    gotoxy(39,30);
+    printf("\E[0;33m4.\E[0;37mActualizar la hora del sistema");
+    gotoxy(39,32);
     printf("\E[0;36m5.\E[0;37mInstalar actualizaciones");
-    gotoxy(58,34);
+    gotoxy(39,34);
     printf("\E[0;36m6.\E[0;37mActivar el sistema");
-    gotoxy(58,36);
+    gotoxy(39,36);
     printf("\E[0;36m7.\E[0;37mBurninTest");
-    gotoxy(58,38);
+    gotoxy(77,24);
+    printf("\E[0;36m8.\E[0;37mComprobar dispositivos");
+    gotoxy(77,26);
+    printf("\E[0;36m9.\E[0;37mComprobar particiones");
+    gotoxy(77,36);
     printf("\E[0;31m0.\E[0;37mVolver al menu");
     gotoxy(61,43);
 	printf("Elige una opcion: ");
@@ -253,7 +320,7 @@ void print_actions_menu() {
 	int menu_opt;
     scanf("%d", &menu_opt);
     // Detecta si se ha introducido un valor no valido
-    if (menu_opt<=7 || menu_opt==666) {
+    if (menu_opt<=9 || menu_opt==666) {
     	// Switch para las diferentes opciones
     	switch (menu_opt) {
     		case 0:
@@ -261,31 +328,39 @@ void print_actions_menu() {
     		break;
     		case 1:
     			map_network_drive();
-    			cls_act_mnu();
+    			cls_actions_mnu();
     		break;
     		case 2:
     			unmap_network_drive();
-    			cls_act_mnu();
+    			cls_actions_mnu();
     		break;
     		case 3:
     			install_drivers();
-    			cls_act_mnu();
+    			cls_actions_mnu();
     		break;
     		case 4:
     			update_sys_hour();
-    			cls_act_mnu();
+    			cls_actions_mnu();
     		break;
     		case 5:
     			update_sys();
-    			cls_act_mnu();
+    			cls_actions_mnu();
     		break;
     		case 6:
     			activate_sys();
-    			cls_act_mnu();
+    			cls_actions_mnu();
     		break;
     		case 7:
     			bit();
-    			cls_act_mnu();
+    			cls_actions_mnu();
+    		break;
+    		case 8:
+    			device_manager();
+    			cls_actions_mnu();
+    		break;
+    		case 9:
+    			partition_manager();
+    			cls_actions_mnu();
     		break;
     		case 666:
     			print_bg();
@@ -316,6 +391,8 @@ void print_menu() {
     gotoxy(65,29);
     printf("\E[0;33m2.\E[0;37mAcciones");
     gotoxy(65,31);
+    printf("\E[0;35m3.\E[0;37mAyuda");
+    gotoxy(65,34);
     printf("\E[0;31m0.\E[0;37mSalir");
     gotoxy(61,39);
 	printf("Elige una opcion: ");
@@ -323,7 +400,7 @@ void print_menu() {
 	int menu_opt;
     scanf("%d", &menu_opt);
     // Detecta si se ha introducido un valor no valido
-    if (menu_opt<=2 || menu_opt==666) {
+    if (menu_opt<=3 || menu_opt==666) {
     	// Switch para las diferentes opciones
     	switch (menu_opt) {
     		case 0:
@@ -334,6 +411,10 @@ void print_menu() {
     		break;
     		case 2:
     			print_actions_menu();
+    		break;
+    		case 3:
+    			print_help();
+    			print_menu();
     		break;
     		case 666:
     			print_bg();
