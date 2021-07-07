@@ -13,7 +13,7 @@ void print_menu();
 void print_actions_menu();
 
 /*
-** Posiciona el cursor en las coordenadas x,y especificadas
+** Positions the cursor at the specified x, y coordinates
 ** @mca 24/06/2021
 */
 void gotoxy(int x, int y){
@@ -26,28 +26,26 @@ void gotoxy(int x, int y){
 }
 
 /*
-** Pinta el fondo basico que usara en todo el programa
+** Print the basic background that you will use throughout the program
 ** @mca 24/06/2021
-** (llamar esta funcion lo menos posible ya que tarda en pintar todo el fondo)
+** (call this function as little as possible since it takes time to paint the entire background)
 */
 void print_bg() {
-	// Limpia la pantalla
 	system("cls");
-	//Pinta el area general de verde
 	for (int i=2; i<139; i++) {
 		for (int j=1; j<49; j++) {
 			gotoxy(i,j);
         	printf("\E[0;32m%c", 219);
 		}
     }
-    // Pinta el area del titulo de negro
+    
     for (int i=20; i<120; i++) {
 		for (int j=3; j<17; j++) {
 			gotoxy(i,j);
         	printf("\E[0;30m%c", 219);
 		}
     }
-    // Imprime el titulo
+    // Print the title
     gotoxy(41,7);
     printf("\E[0;37m %c%c%c%c%c%c %c%c%c   %c%c%c%c%c%c%c%c%c%c%c%c %c%c%c%c%c%c%c \E[0;31m%c%c%c%c%c%c%c\E[0;37m%c %c%c%c%c%c%c%c%c%c%c%c%c%c%c%c",219,219,219,219,219,187,219,219,187,219,219,187,219,219,219,219,219,219,219,219,187,219,219,219,219,219,219,187,219,219,219,219,219,219,219,187,219,219,219,219,219,219,187,219,219,219,219,219,219,219,187);
     gotoxy(41,8);
@@ -63,11 +61,10 @@ void print_bg() {
 }
 
 /*
-** Pinta un cuadrado negro usando las coordenadas dadas por un bucle  
+** Print a black square using the coordinates given by a loop
 ** @mca 24/06/2021
 */
 void print_select_area() {
-	//Pinta el area de seleccion de negro
 	for (int i=20; i<120; i++) {
 		for (int j=20; j<46; j++) {
 			gotoxy(i,j);
@@ -77,7 +74,7 @@ void print_select_area() {
 }
 
 /*
-** Pinta el cuadrado de log cuando se ejecute los comandos de la terminal
+** Print the log square when the terminal commands are run
 ** @mca 29/06/2021
 */
 void print_log_title() {
@@ -99,42 +96,38 @@ void print_log_title() {
 }
 
 /*
-** Pinta una pantalla de ayuda en el menu principal
+** Print a help screen in the main menu
 ** @mca 02/07/2021
 */
 void print_help() {
 	print_select_area();
 	gotoxy(21,21);
 	printf("\e[4;37m%c Este programa simplifica el proceso de BurnIn en los equipos fabricados.",175);
-	
 	gotoxy(21,26);
 	printf("%c Segun el color en los numeros de las opciones significa una cosa u otra:",175);
 	gotoxy(21,28);
 	printf("\E[0;36mCyan\E[0m: La opcion se puede utilizar con normalidad, no requiere permisos de administrador.");
 	gotoxy(21,30);
-	printf("\E[0;33mNaranja\E[0m: La opcion requiere permnisos de administrador, si no se ha ininiciado el programa como"); 
+	printf("\E[0;33mNaranja\E[0m: La opcion requiere permisos de administrador, si no se ha ininiciado el programa como"); 
 	gotoxy(21,31);
 	printf("administrador es necesario reiniciarlo y abrirlo con los permisos correspondientes.");
 	gotoxy(21,33);
 	printf("\E[0;31mRojo\E[0m: Se utiliza para marcar la opcion de volover atras, o en caso de error.");
 	gotoxy(21,35);
 	printf("\E[0;35mMorado\E[0m: Se utiliza para marcar la opcion de ayuda.");
-	
 	gotoxy(57,39);
 	printf("\E[4;31mPRESIONA ENTER PARA VOLVER\e[0m");
-	
 	gotoxy(21,43);
 	printf("Made By: MCA");
 	gotoxy(21,44);
 	printf("Contact Mail: m.capdet@e-corp.es");
-	
 	cin.ignore();
 	cin.ignore();
     print_menu();
 }
 
 /*
-** Espera un input antes de volver a pintar el fondo y el menu (se usará en cada funcion del menu de acciones)
+** Wait for an input before repainting the background and the menu (it will be used in each function of the action menu)
 ** @mca 01/07/2021
 */
 void cls_actions_mnu() {
@@ -145,7 +138,7 @@ void cls_actions_mnu() {
 }
 
 /*
-** Mapea las unidades de red de windows
+** Map windows network drives
 ** @mca 28/06/2021
 */
 void map_network_drive() {
@@ -158,7 +151,7 @@ void map_network_drive() {
 }
 
 /*
-** Desmapea las unidades de red de windows
+** Unmap network drives from windows
 ** @mca 28/06/2021
 */
 void unmap_network_drive() {
@@ -170,7 +163,7 @@ void unmap_network_drive() {
 }
 
 /*
-** Actualiza la hora del sistema
+** Update the system time
 ** @mca 28/06/2021
 */
 void update_sys_hour() {
@@ -184,19 +177,22 @@ void update_sys_hour() {
 }
 
 /*
-** Instala los drivers automaticamente
+** Install drivers automatically
 ** @mca 28/06/2021
+** 
+** DEPRECATED BY UNKNOWN ERROR, NOW USING "device_manager()" FUNCTION
+** @mca 05/07/2021
 */
 void install_drivers() {
 	system("cls");
 	print_log_title();
 	printf("\E[0;32mInstalando drivers...\E[0;37m\n\n");
-	system("pnputil /add-driver X:\\MASTERS\\drivers\\drivers\\*.inf /subdirs /install");
+	system("pnputil /add-driver X:\\masters\\drivers\\drivers\\*.inf /subdirs /install");
 	printf("\n\E[0;32m### COMPLETADO Pulsa cualquier tecla para volver ###\E[0;37m\n\n");
 }
 
 /*
-** Actualiza el sistema usando WUMT
+** Update the system using WUMT
 ** @mca 01/07/2021
 */
 void update_sys() {
@@ -213,7 +209,7 @@ void update_sys() {
 }
 
 /*
-** Recibe una clave por input y la instala en el sistema
+** Open the system activation wizard
 ** @mca 01/07/2021
 */
 void activate_sys() {
@@ -225,7 +221,7 @@ void activate_sys() {
 }
 
 /*
-** Descarga y usa el burnintest
+** Move, use, and remove the BurnInTest
 ** @mca 28/06/2021
 */
 void bit() {
@@ -242,10 +238,11 @@ void bit() {
 	printf("\n\E[0;32mLimpiando...\E[0;37m\n\n");
 	system("rmdir /Q /S ""BurnInTest""");
 	system("del ""AutoBit.bat""");
+	printf("\E[0;32m### COMPLETADO Pulsa cualquier tecla para volver ###\E[0;37m\n\n");
 }
 
 /*
-** Abre el administrador de dispositivos
+** Open device manager
 ** @mca 02/07/2021
 */
 void device_manager() {
@@ -257,7 +254,7 @@ void device_manager() {
 }
 
 /*
-** Abre el gestor de particiones
+** Open the partition manager
 ** @mca 02/07/2021
 */
 void partition_manager() {
@@ -269,13 +266,13 @@ void partition_manager() {
 }
 
 /*
-** Ejecuta todas las funciones de forma automatica
+** Run all functions automatically
 ** @mca 30/06/2021
 */
 void auto_mode() {
 	map_network_drive();
 	update_sys_hour();
-	//install_drivers(); Takes too long to execute, use only in actions under your responsability
+	// -------------- OPTIONAL USE "device_manager()" TO INSTALL MISSING DRIVERS
 	update_sys();
 	activate_sys();
 	bit();
@@ -287,19 +284,17 @@ void auto_mode() {
 }
 
 /*
-** Imprime el menu de acciones y las realiza
+** Print the menu of actions and perform them
 ** @mca 28/06/2021
 */
 void print_actions_menu() {
-	//LLama la funcion de pintar el area de seleccion 
 	print_select_area();
-	// Imprime las opciones
     gotoxy(39,24);
     printf("\E[0;36m1.\E[0;37mConectar unidades de red");
     gotoxy(39,26);
     printf("\E[0;36m2.\E[0;37mDesconectar unidades de red");
     gotoxy(39,28);
-    printf("\E[0;33m3.\E[0;37mInstalar Drivers");
+    printf("\E[0;36m3.\E[0;37mInstalar Drivers");
     gotoxy(39,30);
     printf("\E[0;33m4.\E[0;37mActualizar la hora del sistema");
     gotoxy(39,32);
@@ -309,19 +304,14 @@ void print_actions_menu() {
     gotoxy(39,36);
     printf("\E[0;36m7.\E[0;37mBurninTest");
     gotoxy(77,24);
-    printf("\E[0;36m8.\E[0;37mComprobar dispositivos");
-    gotoxy(77,26);
-    printf("\E[0;36m9.\E[0;37mComprobar particiones");
+    printf("\E[0;36m8.\E[0;37mComprobar particiones");
     gotoxy(77,36);
     printf("\E[0;31m0.\E[0;37mVolver al menu");
     gotoxy(61,43);
 	printf("Elige una opcion: ");
-	// Recoge un valor introducido por el usuario
 	int menu_opt;
     scanf("%d", &menu_opt);
-    // Detecta si se ha introducido un valor no valido
-    if (menu_opt<=9 || menu_opt==666) {
-    	// Switch para las diferentes opciones
+    if (menu_opt<=8 || menu_opt==666) {
     	switch (menu_opt) {
     		case 0:
     			print_menu();
@@ -335,7 +325,7 @@ void print_actions_menu() {
     			cls_actions_mnu();
     		break;
     		case 3:
-    			install_drivers();
+    			device_manager();
     			cls_actions_mnu();
     		break;
     		case 4:
@@ -355,12 +345,9 @@ void print_actions_menu() {
     			cls_actions_mnu();
     		break;
     		case 8:
-    			device_manager();
-    			cls_actions_mnu();
-    		break;
-    		case 9:
     			partition_manager();
     			cls_actions_mnu();
+    		break;
     		break;
     		case 666:
     			print_bg();
@@ -368,9 +355,9 @@ void print_actions_menu() {
     		break;
 		}
 	} else {
-		gotoxy(53,41);
+		gotoxy(53,39);
 		printf("\e[4;31mHAS INTRODUCIDO UN VALOR NO VALIDO!");
-		gotoxy(50,42);
+		gotoxy(50,40);
 		printf("PRESIONA ENTER PARA VOLVER A INTENTARLO...\e[0m");
 		cin.ignore();
 		cin.ignore();
@@ -379,13 +366,11 @@ void print_actions_menu() {
 }
 
 /*
-** Imprime el menu basico para seleccionar acciones
+** Print the basic menu to select actions
 ** @mca 24/06/2021
 */
 void print_menu() {
-	//LLama la funcion de pintar el area de seleccion 
 	print_select_area();
-	// Imprime las opciones
     gotoxy(65,27);
     printf("\E[0;36m1.\E[0;37mAuto");
     gotoxy(65,29);
@@ -396,12 +381,9 @@ void print_menu() {
     printf("\E[0;31m0.\E[0;37mSalir");
     gotoxy(61,39);
 	printf("Elige una opcion: ");
-	// Recoge un valor introducido por el usuario
 	int menu_opt;
     scanf("%d", &menu_opt);
-    // Detecta si se ha introducido un valor no valido
     if (menu_opt<=3 || menu_opt==666) {
-    	// Switch para las diferentes opciones
     	switch (menu_opt) {
     		case 0:
     			exit(0);
