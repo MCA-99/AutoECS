@@ -272,10 +272,10 @@ void partition_manager() {
 void auto_mode() {
 	map_network_drive();
 	update_sys_hour();
-	// -------------- OPTIONAL USE "device_manager()" TO INSTALL MISSING DRIVERS
+	// -------------- OPTIONAL USE "device_manager()" FUNCTION TO INSTALL MISSING DRIVERS
 	update_sys();
-	activate_sys();
 	bit();
+	activate_sys();
 	unmap_network_drive();
 	cin.ignore();
 	cin.ignore();
